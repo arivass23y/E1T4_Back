@@ -1,15 +1,15 @@
 <?php
 
-class Kategoria {
+class Gela {
     private $db;
 
     public function __construct($db) {
         $this->db = $db;
     }
 
-    public function getKategoriak() {
-        $emaitza = $this->db->getKonexioa()->query("SELECT * FROM kategoria");
-       if (!$emaitza) { //Emaitzarik ez badago
+    public function getGelak(){
+        $emaitza = $this->db->getKonexioa()->query("SELECT * FROM gela");
+        if (!$emaitza) { //Emaitzarik ez badago
             echo 'ERROREA: Ezin izan dira datuak eskuratu.';
             die();
         }
@@ -20,8 +20,8 @@ class Kategoria {
         }
     }
 
-    public function getKategoria($id){
-        $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM kategoria WHERE id = ?");
+    public function getGela($id) {
+        $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM gela WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $emaitza = $stmt->get_result();
@@ -36,24 +36,24 @@ class Kategoria {
         }
     }
 
-    public function createKategoria($izena) {
-        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO kategoria(izena) VALUES (?)");
-        $stmt->bind_param("s", $izena);
+    public function createGela($izena,$taldea) {
+        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO gela(izena,taldea) VALUES (?,?)");
+        $stmt->bind_param("ss", $izena, $taldea);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
     }
 
-    public function updateKategoria($izena,$id){
-        $stmt = $this->db->getKonexioa()->prepare("UPDATE kategoria SET izena=? WHERE id=?");
-        $stmt->bind_param("si", $izena,$id);
+    public function updateGela($izena,$id,$taldea){
+        $stmt = $this->db->getKonexioa()->prepare("UPDATE gela SET izena=?, taldea=? WHERE id=?");
+        $stmt->bind_param("ssi", $izena,$taldea,$id);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
     }
 
-    public function deleteKategoria($id){
-        $stmt = $this->db->getKonexioa()->prepare("DELETE FROM kategoria WHERE id=?");
+    public function deleteGela($id){
+        $stmt = $this->db->getKonexioa()->prepare("DELETE FROM gela WHERE id=?");
         $stmt->bind_param("i", $id);
         $emaitza = $stmt->execute();
         $stmt->close();
