@@ -1,25 +1,25 @@
 <?php
 require 'DB.php';
 require 'kategoria.php';
+require '../Utils/utils.php';
 
-// Datu-basearekin erabiltzaileak kudeatzeko objektuak sortu.
 $db = new DB();
 $db->konektatu();
 $kategoriaDB = new Kategoria($db);
 
 $method = $_SERVER['REQUEST_METHOD'];
-$metodo = $_POST['_method'] ?? $method;
-$id = $_POST['id'] ?? null;
-$izena = $_POST['izena'] ?? null;
+$metodo = $_POST['_method'] ?? $method; 
+$id=Utils::intValidazioa($_POST['id'] ?? null);
+$izena=Utils::stringValidazioa($_POST['izena'] ?? null);
+
 if($method === 'POST'){
     switch ($metodo) {
         case 'POST': 
            if (empty($id) || empty($izena)) {
                 http_response_code(400);
                 echo json_encode(["error" => "ID eta izena bete behar dira"]);
-                exit();
+                die();
             }
-
             if ($kategoriaDB->createKategoria($id, $izena)) {
                 echo json_encode(["success" => "Kategoria sortuta"]);
             } else {
@@ -28,15 +28,18 @@ if($method === 'POST'){
             }
         break;
         case 'GET':
-            $emaitza=$kategoriaDB->getKategoriak();
-            //header('Content-Type: application/json');
+            if(empty($id)){
+                $emaitza=$kategoriaDB->getKategoriak();
+            }else{
+                $emaitza=$kategoriaDB->getKategoria($id);
+            }
             echo json_encode($emaitza);
         break;
         case 'PUT':
              if (empty($id) || empty($izena)) {
                 http_response_code(400);
                 echo json_encode(["error" => "ID eta izena derrigorrezkoak dira"]);
-                exit();
+                die();
             }
 
             if ($kategoriaDB->updateKategoria($izena, $id)) {
@@ -49,7 +52,7 @@ if($method === 'POST'){
         case 'DEL':
             if (empty($id)) {
                 echo json_encode(["error" => "ID falta da"]);
-                exit();
+                die();
             }
 
             if ($kategoriaDB->deleteKategoria($id)) {
@@ -58,6 +61,9 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Ez da aurkitu kategoria hori"]);
             }
+        default:
+            http_response_code(405);
+            echo json_encode(["error" => "Metodoa ez da onartzen"]);
         break;
     }
 }
