@@ -16,9 +16,9 @@ $taldea=Utils::stringValidazioa($_POST['taldea'] ?? null);
 if($method === 'POST'){
     switch ($metodo) {
         case 'POST': 
-           if (empty($izena) || empty($taldea)) {
+           if (empty($izena)) {
                 http_response_code(400);
-                echo json_encode(["error" => "Izena eta taldea bete behar dira"]);
+                echo json_encode(["error" => "Izena bete behar da"]);
                 die();
             }
             if ($gelaDB->createGela($izena,$taldea)) {

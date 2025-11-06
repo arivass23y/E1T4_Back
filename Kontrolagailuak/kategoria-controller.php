@@ -17,7 +17,7 @@ if($method === 'POST'){
         case 'POST': 
            if (empty($izena)) {
                 http_response_code(400);
-                echo json_encode(["error" => "Izena bete behar da"]);
+                echo json_encode(["error" => "Izena derrigorrezkoa da"]);
                 die();
             }
             if ($kategoriaDB->createKategoria($izena)) {

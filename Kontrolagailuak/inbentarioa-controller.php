@@ -9,7 +9,7 @@ $inbentarioaDB = new Inbentarioa($db);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $metodo = $_POST['_method'] ?? $method; 
-$etiketa=Utils::intValidazioa($_POST['etiketa'] ?? null);
+$etiketa=Utils::stringValidazioa($_POST['etiketa'] ?? null);
 $idEkipamendua=Utils::stringValidazioa($_POST['idEkipamendu'] ?? null);
 $erosketaData=Utils::dateValidazioa($_POST['erosketaData'] ?? null);
 
@@ -39,7 +39,7 @@ if($method === 'POST'){
         case 'PUT':
              if (empty($etiketa) || empty($idEkipamendua) || empty($erosketaData)) {
                 http_response_code(400);
-                echo json_encode(["error" => "etiketa eta izena derrigorrezkoak dira"]);
+                echo json_encode(["error" => "Etiketa, idEkipamendua eta erosketaData derrigorrezkoak dira"]);
                 die();
             }
 

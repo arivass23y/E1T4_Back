@@ -20,7 +20,7 @@ if (!$emaitza && $metodo !== 'POST') {
 }
 
 
-$nan=Utils::intValidazioa($_POST['nan'] ?? null);
+$nan=Utils::stringValidazioa($_POST['nan'] ?? null);
 $izena=Utils::stringValidazioa($_POST['izena'] ?? null);
 $abizena=Utils::stringValidazioa($_POST['abizena'] ?? null);
 $erabiltzailea=Utils::stringValidazioa($_POST['erabiltzailea'] ?? null);
@@ -52,7 +52,7 @@ if($method === 'POST'){
         case 'GET':
             if(empty($erabiltzailea)){
                 $emaitza=$ErabiltzaileaDB->getErabiltzaileak();
-            }elseif(){
+            }else{
                 $emaitza=$ErabiltzaileaDB->getErabiltzailea($nan);
             }
             echo json_encode($emaitza);
@@ -61,7 +61,7 @@ if($method === 'POST'){
             if (!empty($pasahitza)) {
                 $hash = password_hash($pasahitza, PASSWORD_BCRYPT,['cost' => 12]);
             }
-            if (empty($nan) || empty($izena)) {
+            if (empty($nan) || empty($hash) || empty($erabiltzailea) || empty($rola) || empty($izena) || empty($abizena)) {
                 http_response_code(400);
                 echo json_encode(["error" => "nan eta izena derrigorrezkoak dira"]);
                 die();

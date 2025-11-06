@@ -54,7 +54,7 @@ class Kokalekua {
 
     public function deleteKokalekua($etiketa,$hasieraData){
         $stmt = $this->db->getKonexioa()->prepare("DELETE FROM kokalekua WHERE etiketa = ? AND hasieraData = ?");
-        $stmt->bind_param("is", $etiketa, $hasieraData);
+        $stmt->bind_param("ss", $etiketa, $hasieraData);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;

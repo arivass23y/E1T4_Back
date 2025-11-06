@@ -40,7 +40,7 @@ if($method === 'POST'){
         case 'PUT':
              if (empty($etiketa) || empty($idGela) || empty($hasieraData)) {
                 http_response_code(400);
-                echo json_encode(["error" => "ID eta izena derrigorrezkoak dira"]);
+                echo json_encode(["error" => "Etiketa, idGela eta hasieraData derrigorrezkoak dira"]);
                 die();
             }
 
