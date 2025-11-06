@@ -1,37 +1,38 @@
 <?php
 require 'DB.php';
-require 'kategoria.php';
+require 'gela.php';
 require '../Utils/utils.php';
 
 $db = new DB();
 $db->konektatu();
-$kategoriaDB = new Kategoria($db);
+$gelaDB = new Gela($db);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $metodo = $_POST['_method'] ?? $method; 
 $id=Utils::intValidazioa($_POST['id'] ?? null);
 $izena=Utils::stringValidazioa($_POST['izena'] ?? null);
+$taldea=Utils::stringValidazioa($_POST['taldea'] ?? null);
 
 if($method === 'POST'){
     switch ($metodo) {
         case 'POST': 
-           if (empty($izena)) {
+           if (empty($izena) || empty($taldea)) {
                 http_response_code(400);
-                echo json_encode(["error" => "Izena bete behar da"]);
+                echo json_encode(["error" => "Izena eta taldea bete behar dira"]);
                 die();
             }
-            if ($kategoriaDB->createKategoria($izena)) {
-                echo json_encode(["success" => "Kategoria sortuta"]);
+            if ($gelaDB->createGela($izena,$taldea)) {
+                echo json_encode(["success" => "Gela sortuta"]);
             } else {
                 http_response_code(500);
-                echo json_encode(["error" => "Errorea kategoria sortzean"]);
+                echo json_encode(["error" => "Errorea gela sortzean"]);
             }
         break;
         case 'GET':
             if(empty($id)){
-                $emaitza=$kategoriaDB->getKategoriak();
+                $emaitza=$gelaDB->getGelak();
             }else{
-                $emaitza=$kategoriaDB->getKategoria($id);
+                $emaitza=$gelaDB->getGela($id);
             }
             echo json_encode($emaitza);
         break;
@@ -42,11 +43,11 @@ if($method === 'POST'){
                 die();
             }
 
-            if ($kategoriaDB->updateKategoria($izena, $id)) {
-                echo json_encode(["success" => "Kategoria eguneratuta"]);
+            if ($gelaDB->updateGela($izena, $id, $taldea)) {
+                echo json_encode(["success" => "Gela eguneratuta"]);
             } else {
                 http_response_code(404);
-                echo json_encode(["error" => "Kategoria ez da existitzen"]);
+                echo json_encode(["error" => "Gela ez da existitzen"]);
             }
         break;
         case 'DEL':
@@ -55,11 +56,11 @@ if($method === 'POST'){
                 die();
             }
 
-            if ($kategoriaDB->deleteKategoria($id)) {
-                echo json_encode(["success" => "Kategoria ezabatuta"]);
+            if ($gelaDB->deleteGela($id)) {
+                echo json_encode(["success" => "Gela ezabatuta"]);
             } else {
                 http_response_code(404);
-                echo json_encode(["error" => "Ez da aurkitu kategoria hori"]);
+                echo json_encode(["error" => "Ez da aurkitu gela hori"]);
             }
         default:
             http_response_code(405);
