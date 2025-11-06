@@ -7,7 +7,7 @@ class DB {
     private $pass ;
     private $db;
     
-    public function __construct()
+    public function __construct() //Klasearen konstruktorea BD-aren datuekin
     {
         $this->user = "root";
         $this->host = "localhost";
@@ -15,7 +15,7 @@ class DB {
         $this->db = "santurtzibd";
     }
 
-    public function konektatu() {
+    public function konektatu() { //BD-arekin konektatu
         $this->konexioa = new mysqli($this->host,$this->user,$this->pass,$this->db);  
         if ($this->konexioa->connect_errno) {
             printf("Konexio errorea: %s\n", $this->konexioa->connect_error);

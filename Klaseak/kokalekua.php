@@ -7,7 +7,8 @@ class Kokalekua {
         $this->db = $db;
     }
 
-    public function getKokalekuak() {
+    //GET
+    public function getKokalekuak() { //Kokaleku guztiak hartu
         $emaitza = $this->db->getKonexioa()->query("SELECT * FROM kokalekua");
        if (!$emaitza) { //Emaitzarik ez badago
             echo 'ERROREA: Ezin izan dira datuak eskuratu.';
@@ -20,23 +21,20 @@ class Kokalekua {
         }
     }
 
-    public function getKokalekua($etiketa,$hasieraData){
+    public function getKokalekua($etiketa,$hasieraData){ //Kokaleku bat hartu, etiketa eta hasieraDataren bidez
         $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM kokalekua WHERE etiketa = ? AND hasieraData = ?");
         $stmt->bind_param("ss", $etiketa,$hasieraData);
         $stmt->execute();
         $emaitza = $stmt->get_result();
-        if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+        if (!$emaitza || $emaitza->num_rows === 0) { //Emaitza es badago edo 0 filak badaude NULL bueltatzen du.
+            return null; 
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+
+        return $emaitza->fetch_assoc();
     }
 
-    public function createKokalekua($etiketa,$idGela,$hasieraData,$amaieraData) {
+    //POST
+    public function createKokalekua($etiketa,$idGela,$hasieraData,$amaieraData) { //Kokalekua sortu
         $stmt = $this->db->getKonexioa()->prepare("INSERT INTO kokalekua(etiketa,idGela,hasieraData,amaieraData) VALUES (?,?,?,?)");
         $stmt->bind_param("siss", $etiketa, $idGela, $hasieraData, $amaieraData);
         $emaitza = $stmt->execute();
@@ -44,7 +42,8 @@ class Kokalekua {
         return $emaitza;
     }
 
-    public function updateKokalekua($etiketa,$idGela,$hasieraData,$amaieraData){
+    //PUT
+    public function updateKokalekua($etiketa,$idGela,$hasieraData,$amaieraData){ //Kokalekua eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE kokalekua SET idGela = ?, hasieraData = ?, amaieraData = ? WHERE etiketa = ?");
         $stmt->bind_param("isss", $idGela, $hasieraData, $amaieraData, $etiketa);
         $emaitza = $stmt->execute();
@@ -52,7 +51,8 @@ class Kokalekua {
         return $emaitza;
     }
 
-    public function deleteKokalekua($etiketa,$hasieraData){
+    //DELETE
+    public function deleteKokalekua($etiketa,$hasieraData){ //Kokalekua ezabatu
         $stmt = $this->db->getKonexioa()->prepare("DELETE FROM kokalekua WHERE etiketa = ? AND hasieraData = ?");
         $stmt->bind_param("ss", $etiketa, $hasieraData);
         $emaitza = $stmt->execute();

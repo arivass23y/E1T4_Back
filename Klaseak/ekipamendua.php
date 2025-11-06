@@ -3,40 +3,34 @@
 class Ekipamendua {
     private $db;
 
-    public function __construct($db) {
+    public function __construct($db) { //Bd-arekin konexioa hartzen du.
         $this->db = $db;
     }
 
-    public function getEkipamenduak() {
+    //GET
+    public function getEkipamenduak() { //Ekipamendu guztiak hartu 
         $emaitza = $this->db->getKonexioa()->query("SELECT * FROM ekipamendua");
-       if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+        if ($emaitza === false)||$emaitza->num_rows === 0 { //Emaitzak ez badaude, null bidaltzen du
+            return null;
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+        return $emaitza->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getEkipamendua($id){
+    public function getEkipamendua($id) { //Ekipamendu bat hartu, id-aren bidez
         $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM ekipamendua WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $emaitza = $stmt->get_result();
-        if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+
+        if (!$emaitza || $emaitza->num_rows === 0) { //Emaitza es badago edo 0 filak badaude NULL bueltatzen du.
+            return null; 
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+
+        return $emaitza->fetch_assoc();
     }
 
-    public function createEkipamendua($izena,$deskribapena,$marka,$modelo,$stock,$idKategoria) {
+    //POST
+    public function createEkipamendua($izena,$deskribapena,$marka,$modelo,$stock,$idKategoria) { //Ekipamendua sortu
         $stmt = $this->db->getKonexioa()->prepare("INSERT INTO ekipamendua(izena,deskribapena,marka,modelo,stock,idKategoria) VALUES (?,?,?,?,?,?)");
         $stmt->bind_param("sssssi", $izena, $deskribapena, $marka, $modelo, $stock, $idKategoria);
         $emaitza = $stmt->execute();
@@ -44,7 +38,8 @@ class Ekipamendua {
         return $emaitza;
     }
 
-    public function updateEkipamendua($id,$izena,$deskribapena,$marka,$modelo,$stock,$idKategoria){
+    //PUT
+    public function updateEkipamendua($id,$izena,$deskribapena,$marka,$modelo,$stock,$idKategoria){ //Ekipamendua eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE ekipamendua SET izena=?, deskribapena=?, marka=?, modelo=?, stock=?, idKategoria=? WHERE id=?");
         $stmt->bind_param("ssssssi", $izena,$deskribapena,$marka,$modelo,$stock,$idKategoria,$id);
         $emaitza = $stmt->execute();
@@ -52,7 +47,7 @@ class Ekipamendua {
         return $emaitza;
     }
 
-    public function updateEkipamenduaStock($id,$stock){
+    public function updateEkipamenduaStock($id,$stock){ //Ekipamenduaren stock-a bakarrik eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE ekipamendua SET stock=? WHERE id=?");
         $stmt->bind_param("si", $stock,$id);
         $emaitza = $stmt->execute();
@@ -60,7 +55,8 @@ class Ekipamendua {
         return $emaitza;
     }
 
-    public function deleteEkipamendua($id){
+    //DELETE
+    public function deleteEkipamendua($id){ //Ekipamendua ezabatu id-aren bidez
         $stmt = $this->db->getKonexioa()->prepare("DELETE FROM ekipamendua WHERE id=?");
         $stmt->bind_param("i", $id);
         $emaitza = $stmt->execute();

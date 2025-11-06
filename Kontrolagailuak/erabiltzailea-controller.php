@@ -19,7 +19,6 @@ if (!$emaitza && $metodo !== 'POST') {
     die();
 }
 
-
 $nan=Utils::stringValidazioa($_POST['nan'] ?? null);
 $izena=Utils::stringValidazioa($_POST['izena'] ?? null);
 $abizena=Utils::stringValidazioa($_POST['abizena'] ?? null);

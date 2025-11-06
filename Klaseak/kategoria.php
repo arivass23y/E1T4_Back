@@ -7,36 +7,29 @@ class Kategoria {
         $this->db = $db;
     }
 
-    public function getKategoriak() {
+    //GET
+    public function getKategoriak() { //Kategoria guztiak hartu
         $emaitza = $this->db->getKonexioa()->query("SELECT * FROM kategoria");
-       if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+        if ($emaitza === false)||$emaitza->num_rows === 0 { //Emaitzak ez badaude, null bidaltzen du
+            return null;
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+        return $emaitza->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getKategoria($id){
+    public function getKategoria($id){ //Kategoria bat hartu, id-aren bidez
         $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM kategoria WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $emaitza = $stmt->get_result();
-        if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+        if (!$emaitza || $emaitza->num_rows === 0) { //Emaitza es badago edo 0 filak badaude NULL bueltatzen du.
+            return null; 
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+
+        return $emaitza->fetch_assoc();
     }
 
-    public function createKategoria($izena) {
+    //POST
+    public function createKategoria($izena) { //Kategoria sortu
         $stmt = $this->db->getKonexioa()->prepare("INSERT INTO kategoria(izena) VALUES (?)");
         $stmt->bind_param("s", $izena);
         $emaitza = $stmt->execute();
@@ -44,7 +37,8 @@ class Kategoria {
         return $emaitza;
     }
 
-    public function updateKategoria($izena,$id){
+    //PUT
+    public function updateKategoria($izena,$id){ //Kategoria eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE kategoria SET izena=? WHERE id=?");
         $stmt->bind_param("si", $izena,$id);
         $emaitza = $stmt->execute();
@@ -52,7 +46,8 @@ class Kategoria {
         return $emaitza;
     }
 
-    public function deleteKategoria($id){
+    //DELETE
+    public function deleteKategoria($id){ //Kategoria ezabatu
         $stmt = $this->db->getKonexioa()->prepare("DELETE FROM kategoria WHERE id=?");
         $stmt->bind_param("i", $id);
         $emaitza = $stmt->execute();

@@ -7,36 +7,29 @@ class Gela {
         $this->db = $db;
     }
 
-    public function getGelak(){
+    //GET
+    public function getGelak(){ //Gelak guztiak hartu
         $emaitza = $this->db->getKonexioa()->query("SELECT * FROM gela");
-        if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+        if ($emaitza === false)||$emaitza->num_rows === 0 { //Emaitzak ez badaude, null bidaltzen du
+            return null;
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+        return $emaitza->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function getGela($id) {
+    public function getGela($id) { //Gela bat hartu, id-aren bidez
         $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM gela WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $emaitza = $stmt->get_result();
-        if (!$emaitza) { //Emaitzarik ez badago
-            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
-            die();
+        if (!$emaitza || $emaitza->num_rows === 0) { //Emaitza es badago edo 0 filak badaude NULL bueltatzen du.
+            return null; 
         }
-        else{
-            $taldeak = [];
-            while ($row = $emaitza->fetch_assoc()) {$taldeak[] = $row;} // Emaitzaren lerroak array-ean sartu
-            return $taldeak;
-        }
+
+        return $emaitza->fetch_assoc();
     }
 
-    public function createGela($izena,$taldea) {
+    //POST
+    public function createGela($izena,$taldea) { //Gela sortu
         $stmt = $this->db->getKonexioa()->prepare("INSERT INTO gela(izena,taldea) VALUES (?,?)");
         $stmt->bind_param("ss", $izena, $taldea);
         $emaitza = $stmt->execute();
@@ -44,7 +37,8 @@ class Gela {
         return $emaitza;
     }
 
-    public function updateGela($izena,$id,$taldea){
+    //PUT
+    public function updateGela($izena,$id,$taldea){ //Gela eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE gela SET izena=?, taldea=? WHERE id=?");
         $stmt->bind_param("ssi", $izena,$taldea,$id);
         $emaitza = $stmt->execute();
@@ -52,7 +46,8 @@ class Gela {
         return $emaitza;
     }
 
-    public function deleteGela($id){
+    //DELETE
+    public function deleteGela($id){ //Gela ezabatu id-aren bidez
         $stmt = $this->db->getKonexioa()->prepare("DELETE FROM gela WHERE id=?");
         $stmt->bind_param("i", $id);
         $emaitza = $stmt->execute();
