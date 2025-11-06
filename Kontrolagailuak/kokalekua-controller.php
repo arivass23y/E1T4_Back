@@ -1,6 +1,6 @@
 <?php
 require 'DB.php';
-require 'Kokalekua.php';
+require 'kokalekua.php';
 require '../Utils/utils.php';
 
 $db = new DB();
