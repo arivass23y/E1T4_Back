@@ -20,9 +20,9 @@ class Kokalekua {
         }
     }
 
-    public function getKokalekua($id){
-        $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM kokalekua WHERE id = ?");
-        $stmt->bind_param("i", $id);
+    public function getKokalekua($etiketa,$hasieraData){
+        $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM kokalekua WHERE etiketa = ? AND hasieraData = ?");
+        $stmt->bind_param("ss", $etiketa,$hasieraData);
         $stmt->execute();
         $emaitza = $stmt->get_result();
         if (!$emaitza) { //Emaitzarik ez badago
@@ -45,16 +45,16 @@ class Kokalekua {
     }
 
     public function updateKokalekua($etiketa,$idGela,$hasieraData,$amaieraData){
-        $stmt = $this->db->getKonexioa()->prepare("UPDATE kokalekua SET etiketa=?, idGela=?, hasieraData=?, amaieraData=? WHERE id=?");
-        $stmt->bind_param("sissi", $etiketa, $idGela, $hasieraData, $amaieraData, $id);
+        $stmt = $this->db->getKonexioa()->prepare("UPDATE kokalekua SET idGela = ?, hasieraData = ?, amaieraData = ? WHERE etiketa = ?");
+        $stmt->bind_param("isss", $idGela, $hasieraData, $amaieraData, $etiketa);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
     }
 
-    public function deleteKokalekua($id){
-        $stmt = $this->db->getKonexioa()->prepare("DELETE FROM kokalekua WHERE id=?");
-        $stmt->bind_param("i", $id);
+    public function deleteKokalekua($etiketa,$hasieraData){
+        $stmt = $this->db->getKonexioa()->prepare("DELETE FROM kokalekua WHERE etiketa = ? AND hasieraData = ?");
+        $stmt->bind_param("is", $etiketa, $hasieraData);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
