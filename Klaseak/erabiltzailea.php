@@ -37,6 +37,8 @@ class Erabiltzailea {
     }
 
     public function createErabiltzailea($nan,$izena,$abizena,$erabiltzailea,$pasahitza,$rola) {
+        $randomBytes = random_bytes(32);
+        $key = bin2hex($randomBytes);   
         $stmt = $this->db->getKonexioa()->prepare("INSERT INTO erabiltzailea(nan,izena,abizena,erabiltzailea,pasahitza,rola) VALUES (?,?,?,?,?,?)");
         $stmt->bind_param("ssssss", $nan,$izena,$abizena,$erabiltzailea,$pasahitza,$rola);
         $emaitza = $stmt->execute();
@@ -58,5 +60,31 @@ class Erabiltzailea {
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
+    }
+    public function getErabiltzaileaByCredentials($apiKey) {
+        $stmt = $this->db->getKonexioa()->prepare("SELECT rola FROM erabiltzailea WHERE apiKey = ?");
+        $stmt->bind_param("s", $apiKey);
+        $stmt->execute();
+        $emaitza = $stmt->get_result();
+        if (!$emaitza) { //Emaitzarik ez badago
+            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
+            die();
+        }
+        else{
+            return $emaitza->fetch_assoc();
+        }
+    }
+    public function Login($erabiltzailea,){
+        $stmt = $this->db->getKonexioa()->prepare("SELECT apiKey FROM erabiltzailea WHERE erabiltzailea = ?");
+        $stmt->bind_param("s", $erabiltzailea);
+        $stmt->execute();
+        $emaitza = $stmt->get_result();
+        if (!$emaitza) { //Emaitzarik ez badago
+            echo 'ERROREA: Ezin izan dira datuak eskuratu.';
+            die();
+        }
+        else{
+            return $emaitza->fetch_assoc();
+        }
     }
 }
