@@ -20,9 +20,9 @@ class Inbentarioa {
         }
     }
 
-    public function getInbentarioa($id){
-        $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM inbentarioa WHERE id = ?");
-        $stmt->bind_param("i", $id);
+    public function getInbentarioa($etiketa){
+        $stmt = $this->db->getKonexioa()->prepare("SELECT * FROM inbentarioa WHERE etiketa = ?");
+        $stmt->bind_param("s", $etiketa);
         $stmt->execute();
         $emaitza = $stmt->get_result();
         if (!$emaitza) { //Emaitzarik ez badago
@@ -37,7 +37,7 @@ class Inbentarioa {
     }
 
     public function createInbentarioa($etiketa,$idEkipamendua,$erosketaData) {
-        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO inbentarioa(etiketa,idEkipamendua,erosketaData) VALUES (?,?,?)");
+        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO inbentarioa(etiketa,idEkipamendu,erosketaData) VALUES (?,?,?)");
         $stmt->bind_param("sis", $etiketa, $idEkipamendua, $erosketaData);
         $emaitza = $stmt->execute();
         $stmt->close();
@@ -45,16 +45,16 @@ class Inbentarioa {
     }
 
     public function updateInbentarioa($etiketa,$idEkipamendua,$erosketaData){
-        $stmt = $this->db->getKonexioa()->prepare("UPDATE inbentarioa SET idEkipamendua=?, erosketaData=? WHere etiketa = ?");
+        $stmt = $this->db->getKonexioa()->prepare("UPDATE inbentarioa SET idEkipamendua = ?, erosketaData = ? WHere etiketa = ?");
         $stmt->bind_param("sis", $idEkipamendua,$erosketaData,$etiketa);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
     }
 
-    public function deleteInbentarioa($id){
-        $stmt = $this->db->getKonexioa()->prepare("DELETE FROM inbentarioa WHERE id=?");
-        $stmt->bind_param("i", $id);
+    public function deleteInbentarioa($etiketa){
+        $stmt = $this->db->getKonexioa()->prepare("DELETE FROM inbentarioa WHERE etiketa = ?");
+        $stmt->bind_param("s", $etiketa);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
