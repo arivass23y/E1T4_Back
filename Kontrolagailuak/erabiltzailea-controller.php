@@ -7,8 +7,19 @@ $db = new DB();
 $db->konektatu();
 $ErabiltzaileaDB = new Erabiltzailea($db);
 
+$apiKey = $_POST['HTTP_APIKEY'] ?? '';
+$emaitza=$ErabiltzaileaDB->getErabiltzaileaByCredentials($apiKey);
+
 $method = $_SERVER['REQUEST_METHOD'];
 $metodo = $_POST['_method'] ?? $method; 
+
+
+if (!$emaitza && $metodo !== 'POST') {
+    echo 'ERROREA: Ez daukazu gaitasunak, mesedez .';
+    die();
+}
+
+
 $nan=Utils::intValidazioa($_POST['nan'] ?? null);
 $izena=Utils::stringValidazioa($_POST['izena'] ?? null);
 $abizena=Utils::stringValidazioa($_POST['abizena'] ?? null);
@@ -16,19 +27,23 @@ $erabiltzailea=Utils::stringValidazioa($_POST['erabiltzailea'] ?? null);
 $pasahitza=Utils::stringValidazioa($_POST['pasahitza'] ?? null);
 $rola=Utils::charValidazioa($_POST['rola'] ?? null);
 
+
 if($method === 'POST'){
     switch ($metodo) {
         case 'POST': 
             if (!empty($pasahitza)) {
                 $hash = password_hash($pasahitza, PASSWORD_BCRYPT,['cost' => 12]);
             }    
-            if (empty($nan) || empty($hash)|| empty($erabiltzailea)|| empty($rola)|| empty($izena)|| empty($abizena)) {
+            if (empty($nan) || empty($hash) || empty($erabiltzailea) || empty($rola) || empty($izena) || empty($abizena)) {
                 http_response_code(400);
-                echo json_encode(["error" => "nan eta pasahitza bete behar dira"]);
+                echo json_encode(["error" => "Kanpo guztiak bete behar dira"]);
                 die();
             }
-            if ($ErabiltzaileaDB->createErabiltzailea($nan, $izena,$abizena,$erabiltzailea,$hash,$rola)) {
-                echo json_encode(["success" => "Erabiltzailea sortuta"]);
+            $emaitza=$ErabiltzaileaDB->createErabiltzailea($nan, $izena, $abizena, $erabiltzailea, $hash, $rola);
+            if ($emaitza) {
+                echo json_encode(["success" => "Erabiltzailea sortuta",
+                    "apiKey" => $erabiltzailea
+                ]);
             } else {
                 http_response_code(500);
                 echo json_encode(["error" => "Errorea Erabiltzailea sortzean"]);
@@ -43,13 +58,15 @@ if($method === 'POST'){
             echo json_encode($emaitza);
         break;
         case 'PUT':
-             if (empty($nan) || empty($izena)) {
+            if (!empty($pasahitza)) {
+                $hash = password_hash($pasahitza, PASSWORD_BCRYPT,['cost' => 12]);
+            }
+            if (empty($nan) || empty($izena)) {
                 http_response_code(400);
                 echo json_encode(["error" => "nan eta izena derrigorrezkoak dira"]);
                 die();
             }
-
-            if ($ErabiltzaileaDB->updateErabiltzailea($nan, $izena,$abizena,$erabiltzailea,$pasahitza,$rola)) {
+            if ($ErabiltzaileaDB->updateErabiltzailea($nan, $izena,$abizena,$erabiltzailea,$hash,$rola)) {
                 echo json_encode(["success" => "Erabiltzailea eguneratuta"]);
             } else {
                 http_response_code(404);
@@ -74,9 +91,11 @@ if($method === 'POST'){
                 echo json_encode(["error" => "erabiltzailea eta pasahitza derrigorrezkoak dira"]);
                 die();
             }
-            $emaitza = $ErabiltzaileaDB->getErabiltzaileaByErabiltzailea($erabiltzailea);
+            $emaitza = $ErabiltzaileaDB->Login($erabiltzailea);
             if ($emaitza && password_verify($pasahitza, $emaitza['pasahitza'])) {
-                echo json_encode(["success" => "Login ondoa"]);
+                echo json_encode(["success" => "Login ondo",
+                    "apiKey" => $emaitza['apiKey']
+                ]);
             } else {
                 http_response_code(401);
                 echo json_encode(["error" => "Erabiltzailea edo pasahitza okerra"]);
