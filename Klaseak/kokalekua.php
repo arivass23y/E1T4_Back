@@ -44,8 +44,8 @@ class Kokalekua {
 
     //PUT
     public function updateKokalekua($etiketa,$idGela,$hasieraData,$amaieraData){ //Kokalekua eguneratu
-        $stmt = $this->db->getKonexioa()->prepare("UPDATE kokalekua SET idGela = ?, hasieraData = ?, amaieraData = ? WHERE etiketa = ?");
-        $stmt->bind_param("isss", $idGela, $hasieraData, $amaieraData, $etiketa);
+        $stmt = $this->db->getKonexioa()->prepare("UPDATE kokalekua SET idGela = ?, amaieraData = ? WHERE etiketa = ? AND hasieraData = ?");
+        $stmt->bind_param("isss", $idGela, $amaieraData, $etiketa, $hasieraData);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;

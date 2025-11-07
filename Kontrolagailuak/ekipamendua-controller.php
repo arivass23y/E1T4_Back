@@ -1,6 +1,6 @@
 <?php
-require 'DB.php';
-require 'ekipamendua.php';
+require '../Klaseak/DB.php';
+require '../Klaseak/ekipamendua.php';
 require '../Utils/utils.php';
 
 //BD-arekin konexioa egin
@@ -8,6 +8,9 @@ $db = new DB();
 $db->konektatu();
 $ekipamenduaDB = new Ekipamendua($db); //CRUD egiteko klasea
 $ErabiltzaileaDB = new Erabiltzailea($db); //ApiKey balidatzeko klasea
+
+$method = $_SERVER['REQUEST_METHOD']; //HTTP metodoa lortu
+$metodo = $_POST['_method'] ?? $method; //Metodoa lortu, _method aldagaiaren bidez edo bestela HTTP metodoa bera
 
 $apiKey = $_POST['HTTP_APIKEY'] ?? ''; //ApiKey hartzen du
 $emaitza=$ErabiltzaileaDB->getErabiltzaileaByCredentials($apiKey); //ApiKey ondo badago konprobatzen du
@@ -72,6 +75,7 @@ if($method === 'POST'){
         break;
         case 'DEL': //Ezabatu nahi bada ekipamendua
             if (empty($id)) { //Id-a ez badago, errore mezua
+                http_response_code(400);
                 echo json_encode(["error" => "ID falta da"]);
                 die();
             }
