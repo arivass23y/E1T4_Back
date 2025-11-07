@@ -90,7 +90,7 @@ if($method === 'POST'){
                 echo json_encode(["error" => "erabiltzailea eta pasahitza derrigorrezkoak dira"]);
                 die();
             }
-            $emaitza = $ErabiltzaileaDB->Login($erabiltzailea);
+            $emaitza = $ErabiltzaileaDB->Login($erabiltzailea,$pasahitza);
             if ($emaitza && password_verify($pasahitza, $emaitza['pasahitza'])) {
                 echo json_encode(["success" => "Login ondo",
                     "apiKey" => $emaitza['apiKey']
