@@ -10,7 +10,7 @@ class Kategoria {
     //GET
     public function getKategoriak() { //Kategoria guztiak hartu
         $emaitza = $this->db->getKonexioa()->query("SELECT * FROM kategoria");
-        if ($emaitza === false)||$emaitza->num_rows === 0 { //Emaitzak ez badaude, null bidaltzen du
+        if ($emaitza === false ||$emaitza->num_rows === 0) { //Emaitzak ez badaude, null bidaltzen du
             return null;
         }
         return $emaitza->fetch_all(MYSQLI_ASSOC);

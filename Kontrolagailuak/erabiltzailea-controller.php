@@ -103,15 +103,15 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Erabiltzailea ez da aurkitu"]);
             } else {
-            if ($emaitza && password_verify($pasahitza, $emaitza['pasahitza'])) { //Psahitza bera dela konprobatzen du
-                echo json_encode(["success" => "Login ondo",
-                    "apiKey" => $emaitza['apiKey']
-                ]);
-            } else { //Erabiltzailea edo pasahitza okerra badago, errore mezua bidaltzen du
-                http_response_code(401);
-                echo json_encode(["error" => "Erabiltzailea edo pasahitza okerra"]);
-            }
-        }   
+                if ($emaitza && password_verify($pasahitza, $emaitza['pasahitza'])) { //Psahitza bera dela konprobatzen du
+                    echo json_encode(["success" => "Login ondo",
+                        "apiKey" => $emaitza['apiKey']
+                    ]);
+                } else { //Erabiltzailea edo pasahitza okerra badago, errore mezua bidaltzen du
+                    http_response_code(401);
+                    echo json_encode(["error" => "Erabiltzailea edo pasahitza okerra"]);
+                }
+         }   
         break;
         default: //Lehenetsiz, erroe mezua bidaltzen du metodoa ez badu onartzen
             http_response_code(405);
