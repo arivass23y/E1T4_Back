@@ -32,7 +32,7 @@ class Ekipamendua {
     //POST
     public function createEkipamendua($izena,$deskribapena,$marka,$modelo,$stock,$idKategoria) { //Ekipamendua sortu
         $stmt = $this->db->getKonexioa()->prepare("INSERT INTO ekipamendua(izena,deskribapena,marka,modelo,stock,idKategoria) VALUES (?,?,?,?,?,?)");
-        $stmt->bind_param("sssssi", $izena, $deskribapena, $marka, $modelo, $stock, $idKategoria);
+        $stmt->bind_param("ssssii", $izena, $deskribapena, $marka, $modelo, $stock, $idKategoria);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
@@ -41,7 +41,7 @@ class Ekipamendua {
     //PUT
     public function updateEkipamendua($id,$izena,$deskribapena,$marka,$modelo,$stock,$idKategoria){ //Ekipamendua eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE ekipamendua SET izena=?, deskribapena=?, marka=?, modelo=?, stock=?, idKategoria=? WHERE id=?");
-        $stmt->bind_param("ssssssi", $izena,$deskribapena,$marka,$modelo,$stock,$idKategoria,$id);
+        $stmt->bind_param("ssssiii", $izena,$deskribapena,$marka,$modelo,$stock,$idKategoria,$id);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;

@@ -30,7 +30,7 @@ class Erabiltzailea {
 
     public function getErabiltzaileaByCredentials($apiKey) { // Berrikusi ea ApiKey-a baliozkoa den eta itzuli API Key-ren erabiltzailearen baimenak
  
-        $stmt = $this->db->getKonexioa()->prepare("SELECT rola FROM erabiltzailea WHERE apiKey = ?");
+        $stmt = $this->db->getKonexioa()->prepare("SELECT rola FROM erabiltzailea WHERE api_key = ?");
         $stmt->bind_param("s", $apiKey);
         $stmt->execute();
         $emaitza = $stmt->get_result();

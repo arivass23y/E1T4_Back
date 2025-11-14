@@ -1,11 +1,16 @@
 <?php
 require '../Klaseak/DB.php';
 require '../Klaseak/ekipamendua.php';
+require '../Klaseak/erabiltzailea.php';
 require '../Utils/utils.php';
 
 //BD-arekin konexioa egin
 $db = new DB();
 $db->konektatu();
+
+// Siempre devolver JSON
+header('Content-Type: application/json; charset=utf-8');
+
 $ekipamenduaDB = new Ekipamendua($db); //CRUD egiteko klasea
 $ErabiltzaileaDB = new Erabiltzailea($db); //ApiKey balidatzeko klasea
 
@@ -86,6 +91,7 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Ez da aurkitu ekipamendua hori"]);
             }
+        break;
         default: //Lehenetsiz, erroe mezua bidaltzen du metodoa ez badu onartzen
             http_response_code(405);
             echo json_encode(["error" => "Metodoa ez da onartzen"]);
