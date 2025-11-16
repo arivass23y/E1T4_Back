@@ -2,6 +2,7 @@
 require '../Klaseak/DB.php';
 require '../Klaseak/gela.php';
 require '../Utils/utils.php';
+require '../Klaseak/erabiltzailea.php';
 //BD-arekin konexioa egin
 $db = new DB();
 $db->konektatu();

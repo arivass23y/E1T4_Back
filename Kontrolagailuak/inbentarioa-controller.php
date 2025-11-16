@@ -1,6 +1,7 @@
 <?php
 require '../Klaseak/DB.php';
 require '../Klaseak/inbentarioa.php';
+require '../Klaseak/erabiltzailea.php';
 require '../Utils/utils.php';
 
 //BD-arekin konexioa egin
@@ -23,8 +24,9 @@ if (!$emaitza) { //ApiKey ez bada egokia
 
 //Bidalitako aldagaiak mota egokian dauden balidatu
 $etiketa=Utils::stringValidazioa($_POST['etiketa'] ?? null);
-$idinbentarioa=Utils::stringValidazioa($_POST['idEkipamendu'] ?? null);
-$erosketaData=Utils::dateValidazioa($_POST['erosketaData'] ?? null);
+$idinbentarioa=Utils::intValidazioa($_POST['idEkipamendu'] ?? null);
+$erosketaData=$_POST['erosketaData'] ?? null;
+$erosketaData = DateTime::createFromFormat('Y-m-d', $erosketaData);
 
 if($method === 'POST'){
     switch ($metodo) {

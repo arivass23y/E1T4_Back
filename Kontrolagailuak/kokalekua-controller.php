@@ -1,6 +1,7 @@
 <?php
 require '../Klaseak/DB.php';
 require '../Klaseak/kokalekua.php';
+require '../Klaseak/erabiltzailea.php';
 require '../Utils/utils.php';
 
 //BD-arekin konexioa egin

@@ -19,7 +19,10 @@ if ((!$emaitza|| $emaitza->num_rows === 0) && ($metodo !== 'POST'|| $metodo !== 
     echo 'ERROREA: Ez daukazu gaitasunak, mesedez .';
     die();
 }
-
+if($emaitza['rola']!=='A' && ($metodo ==='DEL'|| $metodo==='PUT'|| $metodo==='POST')){ //Erabiltzaile arruntak ez du baimenik erabiltzailea sortu, ezabatu edo aldatu ahal izateko
+    echo 'ERROREA: Ez daukazu gaitasunak, mesedez .';
+    die();
+}
 //Bidalitako aldagaiak mota egokian dauden balidatu
 $nan=Utils::stringValidazioa($_POST['nan'] ?? null);
 $izena=Utils::stringValidazioa($_POST['izena'] ?? null);
