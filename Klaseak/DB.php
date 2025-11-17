@@ -11,7 +11,7 @@ class DB {
     {
         $this->user = "root";
         $this->host = "localhost";
-        $this->pass = "root123";
+        $this->pass = "";
         $this->db = "santurtzibd";
     }
 
