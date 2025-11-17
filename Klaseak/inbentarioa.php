@@ -39,8 +39,8 @@ class Inbentarioa {
 
     //PUT
     public function updateInbentarioa($etiketa,$idEkipamendua,$erosketaData){ //Inbentarioa eguneratu
-        $stmt = $this->db->getKonexioa()->prepare("UPDATE inbentarioa SET idEkipamendua = ?, erosketaData = ? WHere etiketa = ?");
-        $stmt->bind_param("sis", $idEkipamendua,$erosketaData,$etiketa);
+        $stmt = $this->db->getKonexioa()->prepare("UPDATE inbentarioa SET idEkipamendu = ?, erosketaData = ? WHere etiketa = ?");
+        $stmt->bind_param("iss", $idEkipamendua,$erosketaData,$etiketa);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;

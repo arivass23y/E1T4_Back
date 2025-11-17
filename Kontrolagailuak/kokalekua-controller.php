@@ -23,10 +23,32 @@ if (!$emaitza) { //ApiKey ez bada egokia
 }
 
 //Bidalitako aldagaiak mota egokian dauden balidatu
-$etiketa=Utils::intValidazioa($_POST['etiketa'] ?? null);
-$idGela=Utils::stringValidazioa($_POST['idGela'] ?? null);
-$hasieraData=Utils::dateValidazioa($_POST['hasieraData'] ?? null);
-$amaieraData=Utils::dateValidazioa($_POST['amaieraData'] ?? null);
+$etiketa=Utils::stringValidazioa($_POST['etiketa'] ?? null);
+$idGela=Utils::intValidazioa($_POST['idGela'] ?? null);
+
+$hasieraData = $_POST['hasieraData'] ?? null;
+
+if ($hasieraData) {
+    $dt = DateTime::createFromFormat('Y-m-d', trim($hasieraData));
+    if ($dt !== false) {
+        $hasieraData = $dt->format('Y-m-d'); // fecha lista para la BD
+    } else {
+        echo json_encode(["error" => "Fecha inválida"]);
+        exit;
+    }
+}
+
+$amaieraData=$_POST['amaieraData'] ?? null;
+
+if ($amaieraData) {
+    $dt = DateTime::createFromFormat('Y-m-d', trim($amaieraData));
+    if ($dt !== false) {
+        $amaieraData = $dt->format('Y-m-d'); // fecha lista para la BD
+    } else {
+        echo json_encode(["error" => "Fecha inválida"]);
+        exit;
+    }
+}
 
 if($method === 'POST'){ 
     switch ($metodo) {
@@ -84,6 +106,7 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Ez da aurkitu Kokalekua hori"]);
             }
+        break;
         default: //Metodoa ez badago onartuta   
             http_response_code(405);
             echo json_encode(["error" => "Metodoa ez da onartzen"]);

@@ -24,19 +24,29 @@ if (!$emaitza) { //ApiKey ez bada egokia
 
 //Bidalitako aldagaiak mota egokian dauden balidatu
 $etiketa=Utils::stringValidazioa($_POST['etiketa'] ?? null);
-$idinbentarioa=Utils::intValidazioa($_POST['idEkipamendu'] ?? null);
-$erosketaData=$_POST['erosketaData'] ?? null;
-$erosketaData = DateTime::createFromFormat('Y-m-d', $erosketaData);
+$idEkipamendu=Utils::intValidazioa($_POST['ekipamendua'] ?? null);
+$erosketaData = $_POST['erosketaData'] ?? null;
+
+if ($erosketaData) {
+    $dt = DateTime::createFromFormat('Y-m-d', trim($erosketaData));
+    if ($dt !== false) {
+        $erosketaData = $dt->format('Y-m-d'); // fecha lista para la BD
+    } else {
+        echo json_encode(["error" => "Fecha inválida"]);
+        exit;
+    }
+}
+
 
 if($method === 'POST'){
     switch ($metodo) {
         case 'POST': //Inbentarioa sortu nahi bada
-           if (empty($etiketa) || empty($idinbentarioa) || empty($erosketaData)) { //Aldagaia guztiak nuloak ez diren konprobatu
+           if (empty($etiketa) || empty($idEkipamendu) || empty($erosketaData)) { //Aldagaia guztiak nuloak ez diren konprobatu
                 http_response_code(400);
                 echo json_encode(["error" => "Etiketa, idinbentarioa eta erosketaData bete behar dira"]);
                 die();
             }
-            if ($inbentarioaDB->createinbentarioa($etiketa,$idinbentarioa,$erosketaData)) {
+            if ($inbentarioaDB->createinbentarioa($etiketa,$idEkipamendu,$erosketaData)) {
                 echo json_encode(["success" => "inbentarioa sortuta"]);
             } else { // Errorea gertatzen bada, errore mezua bidaltzen da
                 http_response_code(500);
@@ -57,13 +67,9 @@ if($method === 'POST'){
             }
         break;
         case 'PUT': //Inbentarioa aldatu nahi bada
-             if (empty($etiketa) || empty($idinbentarioa) || empty($erosketaData)) { //Aldagaia guztiak nuloak ez diren konprobatu
-                http_response_code(400);
-                echo json_encode(["error" => "Etiketa, idinbentarioa eta erosketaData derrigorrezkoak dira"]);
-                die();
-            }
+             
 
-            if ($inbentarioaDB->updateinbentarioa($etiketa, $idinbentarioa, $erosketaData)) {
+            if ($inbentarioaDB->updateinbentarioa($etiketa, $idEkipamendu, $erosketaData)) {
                 echo json_encode(["success" => "inbentarioa eguneratuta"]);
             } else { //Errorea gertatzen bada, errore mezua bidaltzen da
                 http_response_code(404);
