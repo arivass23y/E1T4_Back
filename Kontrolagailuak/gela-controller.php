@@ -81,6 +81,7 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Ez da aurkitu gela hori"]);
             }
+        break;
         default: //Metodoa ez badago onartuta
             http_response_code(405);
             echo json_encode(["error" => "Metodoa ez da onartzen"]);

@@ -15,14 +15,14 @@ $method = $_SERVER['REQUEST_METHOD']; //HTTP metodoa lortu
 $metodo = $_POST['_method'] ?? $method; //Metodoa lortu, _method aldagaiaren bidez edo bestela HTTP metodoa bera
 
 //ApiKey balidatu, baina POST edo LOGIN metodoetarako ez da beharrezkoa
-if ((!$emaitza|| $emaitza->num_rows === 0) && ($metodo !== 'POST'|| $metodo !== 'LOGIN')) {
+/*if ((!$emaitza|| $emaitza->num_rows === 0) && ($metodo !== 'POST'|| $metodo !== 'LOGIN')) {
     echo 'ERROREA: Ez daukazu gaitasunak, mesedez .';
     die();
 }
 if($emaitza['rola']!=='A' && ($metodo ==='DEL'|| $metodo==='PUT'|| $metodo==='POST')){ //Erabiltzaile arruntak ez du baimenik erabiltzailea sortu, ezabatu edo aldatu ahal izateko
     echo 'ERROREA: Ez daukazu gaitasunak, mesedez .';
     die();
-}
+}*/
 //Bidalitako aldagaiak mota egokian dauden balidatu
 $nan=Utils::stringValidazioa($_POST['nan'] ?? null);
 $izena=Utils::stringValidazioa($_POST['izena'] ?? null);
@@ -95,6 +95,7 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Ez da aurkitu Erabiltzailea hori"]);
             }
+            break;
         case 'LOGIN': //Erabiltzailea login egin nahi badu
             if (empty($erabiltzailea) || empty($pasahitza)) { //Aldagaia guztiak nuloak ez diren konprobatu
                 http_response_code(400);
