@@ -58,7 +58,7 @@ if($method === 'POST'){
                 echo json_encode(["error" => "Etiketa, idGela eta hasieraData bete behar dira"]);
                 die();
             }
-            if ($kokalekuaDB->createKokalekua($etiketa,$idGela,$hasieraData,$amaieraData)) { //Ondo sortuta badago, mezua bidaltzen da
+            if ($kokalekuaDB->createKokalekua($etiketa,$idGela,$hasieraData)) { //Ondo sortuta badago, mezua bidaltzen da
                 echo json_encode(["success" => "Kokalekua sortuta"]);
             } else { // Errorea gertatzen bada, errore mezua bidaltzen da
                 http_response_code(500);

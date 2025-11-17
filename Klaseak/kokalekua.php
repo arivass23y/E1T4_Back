@@ -34,9 +34,9 @@ class Kokalekua {
     }
 
     //POST
-    public function createKokalekua($etiketa,$idGela,$hasieraData,$amaieraData) { //Kokalekua sortu
-        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO kokalekua(etiketa,idGela,hasieraData,amaieraData) VALUES (?,?,?,?)");
-        $stmt->bind_param("siss", $etiketa, $idGela, $hasieraData, $amaieraData);
+    public function createKokalekua($etiketa,$idGela,$hasieraData) { //Kokalekua sortu
+        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO kokalekua(etiketa,idGela,hasieraData) VALUES (?,?,?)");
+        $stmt->bind_param("sis", $etiketa, $idGela, $hasieraData);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;

@@ -43,7 +43,7 @@ if($method === 'POST'){
         case 'POST': //Inbentarioa sortu nahi bada
            if (empty($etiketa) || empty($idEkipamendu) || empty($erosketaData)) { //Aldagaia guztiak nuloak ez diren konprobatu
                 http_response_code(400);
-                echo json_encode(["error" => "Etiketa, idinbentarioa eta erosketaData bete behar dira"]);
+                echo json_encode(["error" => "Etiketa, idEkipamendua eta erosketaData bete behar dira"]);
                 die();
             }
             if ($inbentarioaDB->createinbentarioa($etiketa,$idEkipamendu,$erosketaData)) {
@@ -89,6 +89,7 @@ if($method === 'POST'){
                 http_response_code(404);
                 echo json_encode(["error" => "Ez da aurkitu inbentarioa hori"]);
             }
+        break;
         default: //Metodoa ez badago onartuta
             http_response_code(405);
             echo json_encode(["error" => "Metodoa ez da onartzen"]);
