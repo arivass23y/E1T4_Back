@@ -54,7 +54,7 @@ if($method === 'POST'){
             }
         break;
         case 'GET': //Erabiltzaileak lortu nahi bada
-            if(empty($erabiltzailea)){  //Erabiltzailea bidaltzen ez bada, erabiltzaile guztiak lortu
+            if(empty($nan)){  //Erabiltzailea bidaltzen ez bada, erabiltzaile guztiak lortu
                 $emaitza=$ErabiltzaileaDB->getErabiltzaileak();
             }else{ //Bestela, erabiltzaile bakarra lortu
                 $emaitza=$ErabiltzaileaDB->getErabiltzailea($nan);
