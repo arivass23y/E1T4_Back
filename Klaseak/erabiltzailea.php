@@ -69,7 +69,7 @@ class Erabiltzailea {
     //PUT
     public function updateErabiltzailea($nan,$izena,$abizena,$erabiltzailea,$pasahitza,$rola){ //Erabiltzailea eguneratu
         $stmt = $this->db->getKonexioa()->prepare("UPDATE erabiltzailea SET izena=?, abizena=?, erabiltzailea=?, pasahitza=?, rola=? WHERE nan=?");
-        $stmt->bind_param("ssssss", $nan,$izena,$abizena,$erabiltzailea,$pasahitza,$rola);
+        $stmt->bind_param("ssssss",$izena,$abizena,$erabiltzailea,$pasahitza,$rola,$nan);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
