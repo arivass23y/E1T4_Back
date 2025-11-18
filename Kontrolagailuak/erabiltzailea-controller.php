@@ -109,7 +109,8 @@ if($method === 'POST'){
             } else {
                 if ($emaitza && ($pasahitza == $emaitza['pasahitza'])) { //Psahitza bera dela konprobatzen du
                     echo json_encode(["success" => "true",
-                        "apiKey" => $emaitza['api_Key']
+                        "apiKey" => $emaitza['api_Key'],
+                        "nan" => $emaitza['nan']
                     ]);
                 } else { //Erabiltzailea edo pasahitza okerra badago, errore mezua bidaltzen du
                     http_response_code(401);

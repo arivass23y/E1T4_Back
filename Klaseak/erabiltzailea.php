@@ -42,7 +42,7 @@ class Erabiltzailea {
     }
 
     public function Login($erabiltzailea){ // Begiratu erabiltzailea eta pasahitza zuzenak diren webgunera sartzeko eta Api Key emateko
-        $stmt = $this->db->getKonexioa()->prepare("SELECT api_Key,pasahitza FROM erabiltzailea WHERE erabiltzailea = ?");
+        $stmt = $this->db->getKonexioa()->prepare("SELECT api_Key,pasahitza,nan FROM erabiltzailea WHERE erabiltzailea = ?");
         $stmt->bind_param("s", $erabiltzailea);
         $stmt->execute();
         $emaitza = $stmt->get_result();
