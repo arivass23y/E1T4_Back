@@ -41,17 +41,17 @@ class Erabiltzailea {
         return $emaitza->fetch_assoc();
     }
 
-    public function Login($erabiltzailea,$pasahitza){ // Begiratu erabiltzailea eta pasahitza zuzenak diren webgunera sartzeko eta Api Key emateko
-        $stmt = $this->db->getKonexioa()->prepare("SELECT apiKey,rola FROM erabiltzailea WHERE erabiltzailea = ? AND pasahitza=?");
-        $stmt->bind_param("ss", $erabiltzailea,$pasahitza);
+    public function Login($erabiltzailea){ // Begiratu erabiltzailea eta pasahitza zuzenak diren webgunera sartzeko eta Api Key emateko
+        $stmt = $this->db->getKonexioa()->prepare("SELECT api_Key,pasahitza FROM erabiltzailea WHERE erabiltzailea = ?");
+        $stmt->bind_param("s", $erabiltzailea);
         $stmt->execute();
         $emaitza = $stmt->get_result();
 
         if (!$emaitza || $emaitza->num_rows === 0) { //Emaitza es badago edo 0 filak badaude NULL bueltatzen du.
             return null; 
         }
-
-        return $emaitza->fetch_assoc();
+        $row = $emaitza->fetch_assoc();
+        return $row;
     }
 
     //POST
