@@ -41,9 +41,9 @@ class Erabiltzailea {
         return $emaitza->fetch_assoc();
     }
 
-    public function Login($erabiltzailea){ // Begiratu erabiltzailea eta pasahitza zuzenak diren webgunera sartzeko eta Api Key emateko
-        $stmt = $this->db->getKonexioa()->prepare("SELECT api_Key,pasahitza,nan FROM erabiltzailea WHERE erabiltzailea = ?");
-        $stmt->bind_param("s", $erabiltzailea);
+    public function Login($erabiltzailea,$pasahitza){ // Begiratu erabiltzailea eta pasahitza zuzenak diren webgunera sartzeko eta Api Key emateko
+        $stmt = $this->db->getKonexioa()->prepare("SELECT api_Key,pasahitza,nan FROM erabiltzailea WHERE erabiltzailea = ? AND pasahitza = ?");
+        $stmt->bind_param("ss", $erabiltzailea,$pasahitza);
         $stmt->execute();
         $emaitza = $stmt->get_result();
 

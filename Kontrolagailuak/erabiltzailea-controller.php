@@ -99,20 +99,15 @@ if($method === 'POST'){
                 echo json_encode(["error" => "erabiltzailea eta pasahitza derrigorrezkoak dira"]);
                 die();
             }
-            $emaitza = $ErabiltzaileaDB->Login($erabiltzailea); //Erabiltzailea existitzen den konprobatzen du eta bere informazioa hartzen du pasahitza hash-eatua barne
+            $emaitza = $ErabiltzaileaDB->Login($erabiltzailea,$pasahitza); //Erabiltzailea existitzen den konprobatzen du eta bere informazioa hartzen du pasahitza hash-eatua barne
             if ($emaitza === null) { //Emaitza hutsik badago, errore mezua bidaltzen da
                 http_response_code(404);
                 echo json_encode(["error" => "Erabiltzailea ez da aurkitu"]);
             } else {
-                if ($emaitza && ($pasahitza == $emaitza['pasahitza'])) { //Psahitza bera dela konprobatzen du
                     echo json_encode(["success" => "true",
                         "apiKey" => $emaitza['api_Key'],
                         "nan" => $emaitza['nan']
                     ]);
-                } else { //Erabiltzailea edo pasahitza okerra badago, errore mezua bidaltzen du
-                    http_response_code(401);
-                    echo json_encode(["error" => "Erabiltzailea edo pasahitza okerra"]);
-                }
          }   
         break;
         default: //Lehenetsiz, erroe mezua bidaltzen du metodoa ez badu onartzen
