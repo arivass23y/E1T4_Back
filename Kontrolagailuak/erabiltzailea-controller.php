@@ -38,16 +38,14 @@ $rola=Utils::charValidazioa($_POST['rola'] ?? null);
 if($method === 'POST'){
     switch ($metodo) {
         case 'POST': //Erabiltzailea sortu nahi bada   
-            if (empty($nan) || empty($hash) || empty($erabiltzailea) || empty($rola) || empty($izena) || empty($abizena)) {  //Aldagaia guztiak nuloak ez diren konprobatu
+            if (empty($nan)|| empty($erabiltzailea) || empty($rola) || empty($izena) || empty($abizena)) {  //Aldagaia guztiak nuloak ez diren konprobatu
                 http_response_code(400);
                 echo json_encode(["error" => "Kanpo guztiak bete behar dira"]);
                 die();
             }
-            $emaitza=$ErabiltzaileaDB->createErabiltzailea($nan, $izena, $abizena, $erabiltzailea, $hash, $rola);
+            $emaitza=$ErabiltzaileaDB->createErabiltzailea($nan, $izena, $abizena, $erabiltzailea, $pasahitza, $rola);
             if ($emaitza) { //Ondo sortuta badago, mezua bidaltzen da
-                echo json_encode(["success" => "Erabiltzailea sortuta",
-                    "apiKey" => $erabiltzailea
-                ]);
+                echo json_encode(["success" => "Erabiltzailea sortuta"]);
             } else { // Errorea gertatzen bada, errore mezua bidaltzen da
                 http_response_code(500);
                 echo json_encode(["error" => "Errorea Erabiltzailea sortzean"]);

@@ -59,8 +59,8 @@ class Erabiltzailea {
         $randomBytes = random_bytes(32); //32 ausazko byte sortzen ditu
         $key = bin2hex($randomBytes); //Byte bitar horiek kate hamaseitar irakurgarri bihurtzen ditu
 
-        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO erabiltzailea(nan,izena,abizena,erabiltzailea,pasahitza,rola) VALUES (?,?,?,?,?,?)");
-        $stmt->bind_param("ssssss", $nan,$izena,$abizena,$erabiltzailea,$pasahitza,$rola);
+        $stmt = $this->db->getKonexioa()->prepare("INSERT INTO erabiltzailea(nan,izena,abizena,erabiltzailea,pasahitza,rola,api_key) VALUES (?,?,?,?,?,?,?)");
+        $stmt->bind_param("sssssss", $nan,$izena,$abizena,$erabiltzailea,$pasahitza,$rola,$key);
         $emaitza = $stmt->execute();
         $stmt->close();
         return $emaitza;
