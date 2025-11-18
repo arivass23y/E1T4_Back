@@ -34,10 +34,7 @@ $rola=Utils::charValidazioa($_POST['rola'] ?? null);
 
 if($method === 'POST'){
     switch ($metodo) {
-        case 'POST': //Erabiltzailea sortu nahi bada
-            if (!empty($pasahitza)) { //Pasahitza huts ez badago, hash-eatu
-                $hash = password_hash($pasahitza, PASSWORD_BCRYPT,['cost' => 12]);
-            }    
+        case 'POST': //Erabiltzailea sortu nahi bada   
             if (empty($nan) || empty($hash) || empty($erabiltzailea) || empty($rola) || empty($izena) || empty($abizena)) {  //Aldagaia guztiak nuloak ez diren konprobatu
                 http_response_code(400);
                 echo json_encode(["error" => "Kanpo guztiak bete behar dira"]);
