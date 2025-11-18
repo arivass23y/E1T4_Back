@@ -19,7 +19,7 @@ if ((!$emaitza) && $metodo !== 'LOGIN') {
     http_response_code(400);
     echo json_encode(["error" => 'ERROREA: Ez daukazu gaitasunak, mesedez beste erabiltzaileekin login egin.']);
 }
-if($emaitza){
+if($emaitza&&$metodo!=="GET"){
     if($emaitza['rola']!=='A' ){ //Erabiltzaile arruntak ez du baimenik erabiltzailea sortu, ezabatu edo aldatu ahal izateko
         http_response_code(400);
         echo json_encode(["error" => 'ERROREA: Ez daukazu gaitasunak, mesedez beste erabiltzaileekin login egin.']);
@@ -54,9 +54,11 @@ if($method === 'POST'){
             }
         break;
         case 'GET': //Erabiltzaileak lortu nahi bada
-            if(empty($nan)){  //Erabiltzailea bidaltzen ez bada, erabiltzaile guztiak lortu
-                $emaitza=$ErabiltzaileaDB->getErabiltzaileak();
-            }else{ //Bestela, erabiltzaile bakarra lortu
+            if(empty($nan)){
+                if($emaitza['rola']=='A' ){
+                    $emaitza=$ErabiltzaileaDB->getErabiltzaileak();
+                }
+            }else{ 
                 $emaitza=$ErabiltzaileaDB->getErabiltzailea($nan);
             }
             if ($emaitza === null) { //Emaitza hutsik badago, errore mezua bidaltzen da
